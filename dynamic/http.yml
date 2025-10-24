@@ -1,0 +1,25 @@
+http:
+  routers:
+    user-router:
+      rule: "Host(localhost) && PathPrefix(/api/users)"
+      entryPoints:
+        - web
+      service: user-microservice
+
+  middlewares:
+    strip-api-prefix:
+      stripPrefix:
+        prefixes:
+          - "/api"
+
+  services:
+    user-microservice:
+      loadBalancer:
+        servers:
+          - url: "http://user-microservice:8080"
+
+    device-microservice:
+      loadBalancer:
+        servers:
+          - url: "http://device-microservice:8081"
+
